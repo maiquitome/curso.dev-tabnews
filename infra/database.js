@@ -25,13 +25,14 @@ async function query(queryObject) {
     // database: process.env.POSTGRES_DATABASE,
     password: process.env.POSTGRES_PASSWORD,
   });
-  await client.connect();
 
   try {
+    await client.connect();
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
-    console.error(error);
+    console.error(error); // só fazer o log, causa outro problema, que é engolir o erro, sem tratar esse erro, por exemplo mostrar uma mensagem de erro para o usuário
+    throw error; // para esse erro ser lançado de novo, continuar borbulhando até o Next.js e devolver um erro 500 na requisição
   } finally {
     await client.end();
   }
