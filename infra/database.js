@@ -24,6 +24,7 @@ async function query(queryObject) {
     database: process.env.POSTGRES_DB,
     // database: process.env.POSTGRES_DATABASE,
     password: process.env.POSTGRES_PASSWORD,
+    ssl: process.env.NODE_ENV === "development" ? false : true,
   });
 
   try {
