@@ -17,18 +17,19 @@ async function query(queryObject) {
   // https://curso.dev/alunos/Andrei/86e5c64f-d0a7-4ecf-8803-4f406402826c
   // https://curso.dev/alunos/Andrei/dd95f5bd-457c-4eed-921c-2cdc2de48bce
 
-  const client = new Client({
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT,
-    user: process.env.POSTGRES_USER,
-    database: process.env.POSTGRES_DB,
-    // database: process.env.POSTGRES_DATABASE,
-    password: process.env.POSTGRES_PASSWORD,
-    ssl: getSSLValues(),
-  });
+  // const client = new Client({
+  //   host: process.env.POSTGRES_HOST,
+  //   port: process.env.POSTGRES_PORT,
+  //   user: process.env.POSTGRES_USER,
+  //   database: process.env.POSTGRES_DB,
+  //   // database: process.env.POSTGRES_DATABASE,
+  //   password: process.env.POSTGRES_PASSWORD,
+  //   ssl: getSSLValues(),
+  // });
 
+  let client;
   try {
-    await client.connect();
+    client = await getNewClient();
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
@@ -39,8 +40,29 @@ async function query(queryObject) {
   }
 }
 
+async function getNewClient() {
+  const client = new Client({
+    host: process.env.POSTGRES_HOST,
+    port: process.env.POSTGRES_PORT,
+    user: process.env.POSTGRES_USER,
+    database: process.env.POSTGRES_DB,
+    // database: process.env.POSTGRES_DATABASE,
+    password: process.env.POSTGRES_PASSWORD,
+    ssl: getSSLValues(),
+  });
+
+  await client.connect();
+  return client;
+}
+
+// export default {
+//   query: query,
+//   getNewClient: getNewClient
+// };
+
 export default {
-  query: query,
+  query,
+  getNewClient,
 };
 
 function getSSLValues() {
@@ -51,5 +73,5 @@ function getSSLValues() {
       ca: process.env.POSTGRES_CA,
     };
 
-  return process.env.NODE_ENV === "development" ? false : true;
+  return process.env.NODE_ENV === "production";
 }
