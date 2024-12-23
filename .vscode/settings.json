@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["tabnews"]
+  "cSpell.words": ["isready", "tabnews"],
+  "vue.server.hybridMode": false
 }
