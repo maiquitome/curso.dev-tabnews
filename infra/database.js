@@ -55,15 +55,17 @@ async function getNewClient() {
   return client;
 }
 
+const database = {
+  query,
+  getNewClient,
+};
+
 // export default {
 //   query: query,
 //   getNewClient: getNewClient
 // };
 
-export default {
-  query,
-  getNewClient,
-};
+export default database;
 
 function getSSLValues() {
   const isThereCertificateAuthority = process.env.POSTGRES_CA;
