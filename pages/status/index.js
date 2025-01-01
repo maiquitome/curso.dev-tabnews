@@ -52,5 +52,10 @@ function DatabaseStatus() {
     );
   }
 
-  return <div>{databaseStatusText}</div>;
+  return (
+    <>
+      <h2>Database</h2>
+      <div>{databaseStatusText}</div>
+    </>
+  );
 }
