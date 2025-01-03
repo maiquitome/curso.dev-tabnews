@@ -36,7 +36,7 @@ async function query(queryObject) {
     console.error(error); // só fazer o log, causa outro problema, que é engolir o erro, sem tratar esse erro, por exemplo mostrar uma mensagem de erro para o usuário
     throw error; // para esse erro ser lançado de novo, continuar borbulhando até o Next.js e devolver um erro 500 na requisição
   } finally {
-    await client.end();
+    await client?.end();
   }
 }
 
