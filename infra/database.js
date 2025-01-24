@@ -1,4 +1,5 @@
 import { Client } from "pg";
+import { ServiceError } from "./errors.js";
 
 async function query(queryObject) {
   // console.log("process.env.POSTGRES_DATABASE", process.env.POSTGRES_DATABASE);
@@ -33,8 +34,14 @@ async function query(queryObject) {
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
-    console.error(error); // só fazer o log, causa outro problema, que é engolir o erro, sem tratar esse erro, por exemplo mostrar uma mensagem de erro para o usuário
-    throw error; // para esse erro ser lançado de novo, continuar borbulhando até o Next.js e devolver um erro 500 na requisição
+    // só fazer o log, causa outro problema, que é engolir o erro, sem tratar esse erro, por exemplo mostrar uma mensagem de erro para o usuário
+    // console.error(error);
+    const serviceErrorObject = new ServiceError({
+      message: "Erro na conexão com Banco ou na Query.",
+      cause: error,
+    });
+
+    throw serviceErrorObject; // para esse erro ser lançado de novo, continuar borbulhando até o Next.js e devolver um erro 500 na requisição
   } finally {
     await client?.end();
   }
